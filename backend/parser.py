@@ -1,5 +1,5 @@
 import csv
-from  rules import detect_anomalies
+from  rules_engine import detect_anomalies
 from phase import get_phase
 
 
