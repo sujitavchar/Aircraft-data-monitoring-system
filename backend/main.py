@@ -2,6 +2,7 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 import os, uuid, shutil
 from pathlib import Path
 from parser import parse_csv
+from report import generate_report
 from starlette.concurrency import run_in_threadpool
 
 app = FastAPI(title = "Aircraft-data-monitoring-system", version="1.0")
@@ -41,6 +42,12 @@ async def upload_file(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code= 500, detail= f"File cannot be parsed : {e}")
     
+    try:
+        report_text = await run_in_threadpool(generate_report, anomalies)
+
+    except Exception as e:
+        raise HTTPException(status_code= 500, detail= f"Error is generating report : {e}")
+    
     #clears server memory after processing the file
     file_path.unlink(missing_ok=True)
 
@@ -48,5 +55,5 @@ async def upload_file(file: UploadFile = File(...)):
         "file": safe_name,
         "total_rows": len(rows),
         "total_anomalies": len(anomalies),
-        "anomalies_sample": anomalies[:20],  # first 20 only
+        "report_text": report_text
     }
