@@ -23,3 +23,10 @@ class Anomaly(BaseModel):
     value: Any
     rule: str
     phase: str
+
+# Response structure for sending report
+class AnalysisReportResponse(BaseModel):
+    file: str
+    total_rows: int
+    total_anomalies: int
+    report_text: str
