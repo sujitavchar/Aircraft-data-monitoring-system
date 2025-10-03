@@ -4,3 +4,8 @@ uvicorn
 google-generativeai
 python-dotenv
 python-multipart
+numpy
+pandas
+scikit-learn
+joblib
+websockets

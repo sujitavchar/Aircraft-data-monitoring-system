@@ -1,15 +1,20 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, WebSocket
 import os, uuid, shutil
 from pathlib import Path
 from parser import parse_csv
 from report import generate_report
 from starlette.concurrency import run_in_threadpool
+import joblib
+import numpy as np
 
 app = FastAPI(title = "Aircraft-data-monitoring-system", version="1.0")
 
 #Path;ib for safer paths
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+#Load model 
+model = joblib.load("../model/model.pkl")
 
 
 @app.get("/")

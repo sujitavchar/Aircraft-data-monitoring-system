@@ -4,17 +4,22 @@ from typing import List, Any
 # Request structure for  flight data row
 class DataRow(BaseModel):
     timestamp: str
-    altitude_ft : float
-    airspeed_kts: float
-    pitch_deg: float
-    roll_deg: float
-    vertical_speed_fpm: float
+    altitude : float
+    engine1_rpm: float
+    engine2_rpm: float
     engine1_temp_C: float
-    engine2_temp_C : float
+    engine2_temp_C: float
+    vibration_mm_s: float
+    fuel_flow_kg_h: float
+    oil_pressure_psi: float
     heading_deg: float
+    hydraulic_pressure_psi: float
+    electrical_load_amp: float 
+    cabin_pressure_ft: float
+    angle_of_attack_deg: float
     flaps_deg: float
     spoiler_percent: float
-    phase: str
+
 
 # request structure for anomaly 
 class Anomaly(BaseModel):

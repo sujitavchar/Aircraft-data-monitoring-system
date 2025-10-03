@@ -64,7 +64,7 @@ def generate_report(anomalies):
 
     # to Gemini
     # Retry logic (up to 2 attempts)
-    for attempt in range(2):
+    for attempt in range(2): 
         try:
             response = model.generate_content(prompt)
             return response.text
