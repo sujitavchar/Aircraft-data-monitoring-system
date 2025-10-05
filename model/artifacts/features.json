@@ -1,0 +1,19 @@
+[
+  "altitude",
+  "engine1_rpm",
+  "engine2_rpm",
+  "engine1_temp_C",
+  "engine2_temp_C",
+  "vibration_mm_s",
+  "fuel_flow_kg_h",
+  "oil_pressure_psi",
+  "hydraulic_pressure_psi",
+  "electrical_load_amp",
+  "cabin_pressure_ft",
+  "angle_of_attack_deg",
+  "flaps_deg",
+  "spoiler_percent",
+  "vs_fpm",
+  "heading_sin",
+  "heading_cos"
+]

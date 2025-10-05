@@ -1,20 +1,27 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException, WebSocket
+from fastapi import FastAPI, UploadFile, File, HTTPException, WebSocket, WebSocketDisconnect
 import os, uuid, shutil
 from pathlib import Path
 from parser import parse_csv
 from report import generate_report
 from starlette.concurrency import run_in_threadpool
-import joblib
 import numpy as np
+import pandas as pd
+import json
+import tensorflow as tf
+import sys
+
+
+ROOT_DIR = Path(__file__).parent.parent
+sys.path.append(str(ROOT_DIR))
+
+from model.execute import predict
 
 app = FastAPI(title = "Aircraft-data-monitoring-system", version="1.0")
 
-#Path;ib for safer paths
+#Pathlib for safer paths
 UPLOAD_DIR = Path("uploads")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
-#Load model 
-model = joblib.load("../model/model.pkl")
 
 
 @app.get("/")
@@ -62,3 +69,78 @@ async def upload_file(file: UploadFile = File(...)):
         "total_anomalies": len(anomalies),
         "report_text": report_text
     }
+
+
+@app.websocket("/ws/live-monitoring")
+async def ws_live_monitoring(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            try:
+                data = await websocket.receive_json()
+
+                # Validate required keys
+                required_keys = [
+                    "timestamp", "altitude", "engine1_rpm", "engine2_rpm",
+                    "engine1_temp_C", "engine2_temp_C", "vibration_mm_s",
+                    "fuel_flow_kg_h", "oil_pressure_psi", "heading_deg",
+                    "hydraulic_pressure_psi", "electrical_load_amp",
+                    "cabin_pressure_ft", "angle_of_attack_deg",
+                    "flaps_deg", "spoiler_percent"
+                ]
+                for key in required_keys:
+                    if key not in data:
+                        await websocket.send_json({
+                            "success": False,
+                            "error": f"Missing field: {key}"
+                        })
+                        continue
+
+                # # Convert JSON to numpy array (excluding timestamp if not numeric)
+                # input_array = [
+                #     data["timestamp"],  # string
+                #     float(data["altitude"]),
+                #     float(data["engine1_rpm"]),
+                #     float(data["engine2_rpm"]),
+                #     float(data["engine1_temp_C"]),
+                #     float(data["engine2_temp_C"]),
+                #     float(data["vibration_mm_s"]),
+                #     float(data["fuel_flow_kg_h"]),
+                #     float(data["oil_pressure_psi"]),
+                #     float(data["heading_deg"]),
+                #     float(data["hydraulic_pressure_psi"]),
+                #     float(data["electrical_load_amp"]),
+                #     float(data["cabin_pressure_ft"]),
+                #     float(data["angle_of_attack_deg"]),
+                #     float(data["flaps_deg"]),
+                #     float(data["spoiler_percent"])
+                # ]
+
+                # Run prediction
+                try:
+                    prediction = predict(data)
+                    
+                    await websocket.send_json({
+                        "success": True,
+                        "timestamp": data["timestamp"],  
+                        "model_response": prediction
+                    })
+                except Exception as e:
+                    await websocket.send_json({
+                        "success": False,
+                        "error": f"Model prediction error: {str(e)}"
+                    })
+
+            except ValueError as e:  # bad JSON
+                await websocket.send_json({
+                    "success": False,
+                    "error": f"Invalid JSON: {str(e)}"
+                })
+            except Exception as e:
+                await websocket.send_json({
+                    "success": False,
+                    "error": f"Unexpected error: {str(e)}"
+                })
+
+    except WebSocketDisconnect:
+        print("Client disconnected")
