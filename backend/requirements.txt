@@ -8,4 +8,5 @@ numpy
 pandas
 scikit-learn
 joblib
-websockets
+websocketste
+tensorflow
