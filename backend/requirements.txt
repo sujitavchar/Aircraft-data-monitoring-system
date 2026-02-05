@@ -10,3 +10,5 @@ scikit-learn
 joblib
 websocketste
 tensorflow
+openai
+groq

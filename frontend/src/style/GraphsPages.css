@@ -1,0 +1,40 @@
+.graphs-page {
+  background-color: black;
+  color: white;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+body{
+    background-color: #222;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.graph-title {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+
+
+.graphs-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  gap: 20px;
+  justify-content: center;
+}
+
+.graph-wrapper {
+  flex: 1 1 45%;
+  min-width: 300px;
+  background-color: #222;
+  padding: 10px;
+  border-radius: 8px;
+}

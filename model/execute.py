@@ -53,7 +53,7 @@ from tensorflow import keras
 # --------------------------
 # Load artifacts (your original constants)
 # --------------------------
-ARTIFACT_DIR = "C:\\Users\\shri\\Desktop\\Aircraft-data-monitoring-system\\model\\artifacts"
+ARTIFACT_DIR = "C:\\Users\\HP\\OneDrive\\Desktop\\Aircraft-data-monitoring-system\\model\\artifacts"
 MODEL_PKL = os.path.join(ARTIFACT_DIR, "model.pkl")
 SCALER_PKL = os.path.join(ARTIFACT_DIR, "scaler.pkl")
 FEATURES_JSON = os.path.join(ARTIFACT_DIR, "features.json")

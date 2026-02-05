@@ -12,12 +12,28 @@ import json
 import sys
 
 from model.execute import predict
+from fastapi.middleware.cors import CORSMiddleware
 
 
 ROOT_DIR = Path(__file__).parent.parent
 sys.path.append(str(ROOT_DIR))
 
 app = FastAPI(title = "Aircraft-data-monitoring-system", version="1.0")
+
+
+origins = [
+    "http://localhost:3000",   # React frontend
+    "http://127.0.0.1:5500",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,        # Allowed domains
+    allow_credentials=True,
+    allow_methods=["*"],          # GET, POST, PUT, DELETE, etc.
+    allow_headers=["*"],          # Allow all headers
+)
+
 
 #Pathlib for safer paths
 UPLOAD_DIR = Path("uploads")

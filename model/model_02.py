@@ -24,7 +24,7 @@ from tensorflow.keras import layers, models, callbacks
 # --------------------------
 # Artifact paths
 # --------------------------
-ARTIFACT_DIR = "artifacts"
+ARTIFACT_DIR = "C:\\Users\\HP\\OneDrive\\Desktop\\Aircraft-data-monitoring-system\\model\\artifacts"
 MODEL_PKL = os.path.join(ARTIFACT_DIR, "model.pkl")
 SCALER_PKL = os.path.join(ARTIFACT_DIR, "scaler.pkl")
 FEATURES_JSON = os.path.join(ARTIFACT_DIR, "features.json")
