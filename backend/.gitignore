@@ -16,7 +16,7 @@ dist/
 
 # logs
 *.log
-
+uploads/
 # dotenv
 .env
 .env.*

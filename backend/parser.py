@@ -1,6 +1,6 @@
 import csv
-from  rules_engine import detect_anomalies
-from phase import get_phase
+from  backend.rules_engine import detect_anomalies
+from backend.phase import get_phase
 
 
 def parse_csv(file_path: str):

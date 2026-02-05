@@ -1,20 +1,21 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, WebSocket, WebSocketDisconnect
 import os, uuid, shutil
+import tensorflow as tf
+
 from pathlib import Path
-from parser import parse_csv
-from report import generate_report
+from backend.parser import parse_csv
+from backend.report import generate_report
 from starlette.concurrency import run_in_threadpool
 import numpy as np
 import pandas as pd
 import json
-import tensorflow as tf
 import sys
+
+from model.execute import predict
 
 
 ROOT_DIR = Path(__file__).parent.parent
 sys.path.append(str(ROOT_DIR))
-
-from model.execute import predict
 
 app = FastAPI(title = "Aircraft-data-monitoring-system", version="1.0")
 
@@ -28,7 +29,7 @@ UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 def read_root():
     return {"message": "Welcome to Root"}
 
-@app.put("/upload")
+@app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
     if not file.filename.endswith(".csv"):
         raise HTTPException(status_code = 400, detail = "Only csv files  are allowed")
