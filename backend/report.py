@@ -5,10 +5,13 @@ from datetime import datetime
 import google.generativeai as genai
 from dotenv import load_dotenv
 from google.api_core.exceptions import ResourceExhausted
+from openai import OpenAI
 
 load_dotenv()
 
 API_KEY = os.getenv("GEMINI_API_KEY")
+
+
 
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel("gemini-2.0-flash")
@@ -34,6 +37,32 @@ def summarize_anomalies(anomalies):
         })
 
     return summary_input
+
+
+def generate_report_open(summary_input, prompt):
+    print("OPENAI_API_KEY loaded:", bool(os.getenv("OPENAI_API_KEY")))
+    print("Gemini_API_KEY loaded:", bool(os.getenv("GEMINI_API_KEY")))
+
+    client = OpenAI(
+        base_url="https://openrouter.ai/api/v1"
+    )
+    completion = client.chat.completions.create(
+        model="meta-llama/llama-3.1-70b-instruct", 
+        messages=[
+            {
+                "role": "system",
+                "content": "You are an aviation accident investigator."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ] 
+
+    )
+    return completion.choices[0].message.content
+
+
 
 
 def generate_report(anomalies):
@@ -62,17 +91,27 @@ def generate_report(anomalies):
     prompt += "### 3. Key Moments Leading to Loss of Control (WHAT)\n"
     prompt += "### 4. Preventive Suggestions\n"
 
+    # to openrouter
+
+    try:
+        response = generate_report_open(summary_input, prompt)
+        return response
+    except Exception as e:
+        raise RuntimeError(f"AI API call failed: {e}")
+
+
+
     # to Gemini
     # Retry logic (up to 2 attempts)
-    for attempt in range(2): 
-        try:
-            response = model.generate_content(prompt)
-            return response.text
-        except ResourceExhausted as e:
-            wait_time = 30 * (attempt + 1)
-            print(f"Rate limit hit. Retrying in {wait_time}s...")
-            time.sleep(wait_time)
-        except Exception as e:
-            raise RuntimeError(f"Gemini API call failed: {e}")
+    # for attempt in range(2):  
+    #     try:
+    #         response = model.generate_content(prompt)
+    #         return response.text
+    #     except ResourceExhausted as e:
+    #         wait_time = 30 * (attempt + 1)
+    #         print(f"Rate limit hit. Retrying in {wait_time}s...")
+    #         time.sleep(wait_time)
+    #     except Exception as e:
+    #         raise RuntimeError(f"Gemini API call failed: {e}")
 
     raise RuntimeError("Failed to generate report after retries.")

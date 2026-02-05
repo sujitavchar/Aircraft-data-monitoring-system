@@ -1,0 +1,27 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# virtual env
+venv/
+.venv/
+env/
+ENV/
+
+# distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# logs
+*.log
+uploads/
+# dotenv
+.env
+.env.*
+
+# misc
+.DS_Store
+.vscode/
+.idea/
