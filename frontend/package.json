@@ -5,11 +5,19 @@
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.8.0",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "file-saver": "^2.0.5",
+    "jspdf": "^3.0.3",
+    "papaparse": "^5.5.3",
+    "pdf-lib": "^1.17.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.6.0",
+    "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
+    "recharts": "^3.2.0",
+    "typeface-roboto-mono": "^1.1.13",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, WebSocket, WebSocketDisconnect
 import os, uuid, shutil
 import tensorflow as tf
+from fastapi.middleware.cors import CORSMiddleware
 
 from pathlib import Path
 from backend.parser import parse_csv
@@ -18,6 +19,15 @@ ROOT_DIR = Path(__file__).parent.parent
 sys.path.append(str(ROOT_DIR))
 
 app = FastAPI(title = "Aircraft-data-monitoring-system", version="1.0")
+
+# Configure CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],           # Allows all origins
+    allow_credentials=False,       # Must be False if allow_origins=["*"]
+    allow_methods=["*"],           # Allows all methods (GET, POST, etc.)
+    allow_headers=["*"],           # Allows all headers
+)
 
 #Pathlib for safer paths
 UPLOAD_DIR = Path("uploads")

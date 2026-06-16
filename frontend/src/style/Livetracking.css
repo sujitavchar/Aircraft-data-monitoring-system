@@ -1,0 +1,259 @@
+.live-tracking-page {
+  display: flex;
+  height: 100vh;
+}
+
+/* LEFT SIDE (Graphs) */
+.graphs {
+  width: 60%;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 20px;
+  background: #ffffff;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.graphs > * {
+  margin-bottom: 30px;
+}
+
+.time-display {
+  position: sticky;
+  top: 0;
+  margin-left: 390px;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-family: monospace;
+  font-size: 20px;
+  border-radius: 6px;
+  padding: 6px 18px;
+  text-align: center;
+  z-index: 999;
+  margin-bottom: 15px;
+}
+
+/* RIGHT SIDE (Parameters) */
+.parameters {
+  width: 40%;
+  padding: 25px;
+  background-color: #f5f5f5;
+  color: black;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* FLIGHT STATUS TITLE */
+.flight-status-title {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 900;
+  font-family: "Roboto Mono", monospace;
+  margin-bottom: 25px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* PARAMETER BOX */
+.param-box {
+  background: white;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 18px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.12);
+  border-left: 5px solid #111;
+}
+
+/* PARAM HEADER */
+.param-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.param-label {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Roboto Mono", monospace;
+}
+
+/* ---------------- DANGER CARD (Fancy like Probability) ---------------- */
+.danger-card {
+  background: linear-gradient(135deg, #111827, #374151);
+  border-radius: 14px;
+  padding: 18px;
+  color: white;
+}
+
+.danger-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.danger-number {
+  font-size: 28px;
+  font-weight: 900;
+  font-family: "Roboto Mono", monospace;
+}
+
+.danger-pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 900;
+  font-family: "Roboto Mono", monospace;
+  color: white;
+}
+
+/* Danger Pill Colors */
+.danger-pill.safe {
+  background: #16a34a;
+}
+
+.danger-pill.warning {
+  background: #f97316;
+}
+
+.danger-pill.critical {
+  background: #dc2626;
+}
+
+.danger-subtext {
+  margin-top: 6px;
+  font-size: 13px;
+  opacity: 0.8;
+  font-family: "Roboto Mono", monospace;
+}
+
+.danger-bar-dark {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+.danger-fill-dark {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}
+
+/* Danger Fill Colors */
+.danger-fill-dark.safe {
+  background: #22c55e;
+}
+
+.danger-fill-dark.warning {
+  background: #fb923c;
+}
+
+.danger-fill-dark.critical {
+  background: #ef4444;
+}
+
+/* ---------------- PROBABILITY CARD ---------------- */
+.probability-card {
+  background: linear-gradient(135deg, #111827, #374151);
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  color: white;
+}
+
+.prob-value {
+  font-size: 30px;
+  font-weight: 900;
+  font-family: "Roboto Mono", monospace;
+}
+
+.prob-text {
+  margin-top: 6px;
+  font-size: 14px;
+  opacity: 0.8;
+  font-family: "Roboto Mono", monospace;
+}
+
+/* Probability Bar */
+.prob-bar {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+
+.prob-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease-in-out;
+}
+
+/* Probability Fill Colors */
+.prob-fill.safe {
+  background: #22c55e;
+}
+
+.prob-fill.warning {
+  background: #fb923c;
+}
+
+.prob-fill.critical {
+  background: #ef4444;
+}
+
+/* Moderate (Yellowish) */
+.danger-pill.moderate {
+  background: #eab308;
+}
+
+.danger-fill-dark.moderate {
+  background: #facc15;
+}
+
+.prob-fill.moderate {
+  background: #facc15;
+}
+
+/* PHASE BOX */
+.phase-box {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #111827;
+  color: white;
+  font-weight: 700;
+  font-family: "Roboto Mono", monospace;
+  font-size: 15px;
+}
+
+/* TROUBLE LIST */
+.trouble-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.trouble-item {
+  background: #fee2e2;
+  border-left: 5px solid #dc2626;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-family: "Roboto Mono", monospace;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.no-trouble {
+  background: #dcfce7;
+  border-left: 5px solid #16a34a;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-family: "Roboto Mono", monospace;
+  font-weight: 700;
+  font-size: 14px;
+}

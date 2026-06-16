@@ -14,7 +14,7 @@ API_KEY = os.getenv("GEMINI_API_KEY")
 
 
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel("gemini-2.0-flash")
+model = genai.GenerativeModel("gemini-3.5-flash")
 
 def summarize_anomalies(anomalies):
     grouped = defaultdict(list)
@@ -38,11 +38,29 @@ def summarize_anomalies(anomalies):
 
     return summary_input
 
-
-def generate_report_open(summary_input, prompt):
-    print("OPENAI_API_KEY loaded:", bool(os.getenv("OPENAI_API_KEY")))
+def generate_report_gemini(prompt):
     print("Gemini_API_KEY loaded:", bool(os.getenv("GEMINI_API_KEY")))
 
+    last_error = None
+    for attempt in range(2):
+        try:
+            response = model.generate_content(prompt)
+            return response.text
+        except ResourceExhausted as e:
+            last_error = e
+            wait_time = 30 * (attempt + 1)
+            print(f"Gemini rate limit hit. Retrying in {wait_time}s...")
+            time.sleep(wait_time)
+        except Exception as e:
+            # Non-rate-limit errors fail immediately, no point retrying
+            raise RuntimeError(f"Gemini API call failed: {e}")
+
+    raise RuntimeError(f"Gemini rate-limited after retries: {last_error}")
+
+
+def generate_report_open( prompt):
+    print("OPENAI_API_KEY loaded:", bool(os.getenv("OPENAI_API_KEY")))
+    
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1"
     )
@@ -76,7 +94,7 @@ def generate_report(anomalies):
 
     # Build prompt
     prompt = "You are an aviation accident investigator. "
-    prompt += "Write a structured **Accident Investigation Report** based ONLY on the anomalies provided below. "
+    prompt += "Write a structured **Investigation Report** based ONLY on the anomalies provided below. Generate report in detail with analysis"
     prompt += "Do not include disclaimers, prefaces, or notes about limited data. "
     prompt += "Begin directly with the report.\n\n"
 
@@ -85,7 +103,7 @@ def generate_report(anomalies):
         prompt += f"- {s['rule']}: {s['count']} times, from {s['first_occurrence']} to {s['last_occurrence']}, max={s['max_value']}\n"
 
     prompt += "\n### Report Format\n"
-    prompt += "## Accident Investigation Report\n"
+    prompt += "## Investigation Report\n"
     prompt += "### 1. Cause Analysis (WHY)\n"
     prompt += "### 2. Contribution to Accident (HOW)\n"
     prompt += "### 3. Key Moments Leading to Loss of Control (WHAT)\n"
@@ -94,10 +112,15 @@ def generate_report(anomalies):
     # to openrouter
 
     try:
-        response = generate_report_open(summary_input, prompt)
-        return response
-    except Exception as e:
-        raise RuntimeError(f"AI API call failed: {e}")
+        return generate_report_gemini(prompt)
+    except Exception as gemini_error:
+        print(f"Gemini failed ({gemini_error}). Falling back to OpenRouter...")
+        try:
+            return generate_report_open( prompt)
+        except Exception as openrouter_error:
+            raise RuntimeError(
+                f"Both providers failed. Gemini: {gemini_error} | OpenRouter: {openrouter_error}"
+            )
 
 
 
